@@ -1,1 +1,1 @@
-# cla-check
+# cla-checker

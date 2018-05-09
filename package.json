@@ -1,10 +1,10 @@
 {
-  "name": "@outsider/cla-check",
+  "name": "@outsider/cla-checker",
   "version": "0.1.0",
   "description": "A probot to check CLA signed",
   "author": "Outsider <outsideris@gmail.com> (https://github.com/outsideris)",
   "license": "MIT",
-  "repository": "https://github.com/outsideris/probot-cla-check.git",
+  "repository": "https://github.com/outsideris/cla-checker.git",
   "scripts": {
     "dev": "nodemon --exec \"npm start\"",
     "start": "probot run ./index.js",
