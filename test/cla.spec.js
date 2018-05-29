@@ -101,11 +101,9 @@ test('extract an make unique emails from commits', () => {
   expect(committers).toHaveLength(3)
 })
 
-test('fetch email list from given url', (done) => {
+test('fetch email list from given url', async () => {
   const list = 'https://gist.githubusercontent.com/outsideris/829ec0dff2533b42695e96072734f947/raw/fd009e8281fb8c4b37a931c064e7195213659c42/signed.txt'
-  fetchList(list, (err, emails) => {
-    if (err) { return done(err) }
-    expect(emails).toHaveLength(4)
-    done()
-  })
+  const emails = await fetchList(list)
+
+  expect(emails).toHaveLength(4)
 })
