@@ -13,6 +13,7 @@
     "test:watch": "jest --watch --notify --notifyMode=change --coverage"
   },
   "dependencies": {
+    "lodash.uniqby": "^4.7.0",
     "probot": "^6.0.0"
   },
   "devDependencies": {
