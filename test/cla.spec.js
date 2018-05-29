@@ -1,4 +1,4 @@
-const { extractEmails, fetchList } = require('../lib/cla')
+const { extractCommitters, fetchList } = require('../lib/cla')
 
 test('extract a email from commits', () => {
   const commits = [{
@@ -31,10 +31,10 @@ test('extract a email from commits', () => {
     parents: [{}]
   }]
 
-  const emails = extractEmails(commits)
+  const committers = extractCommitters(commits)
 
-  expect(emails).toHaveLength(1)
-  expect(emails).toContain('me@example.com')
+  expect(committers).toHaveLength(1)
+  expect(committers[0].email).toBe('me@example.com')
 })
 
 test('extract an make unique emails from commits', () => {
@@ -96,9 +96,9 @@ test('extract an make unique emails from commits', () => {
     parents: [{}]
   }]
 
-  const emails = extractEmails(commits)
+  const committers = extractCommitters(commits)
 
-  expect(emails).toHaveLength(3)
+  expect(committers).toHaveLength(3)
 })
 
 test('fetch email list from given url', (done) => {
