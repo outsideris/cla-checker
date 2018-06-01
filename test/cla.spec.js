@@ -1,4 +1,4 @@
-const { extractCommitters, fetchList } = require('../lib/cla')
+const { extractCommitters, fetchList, checkSigned } = require('../lib/cla')
 
 test('extract a email from commits', () => {
   const commits = [{
@@ -106,4 +106,32 @@ test('fetch email list from given url', async () => {
   const emails = await fetchList(list)
 
   expect(emails).toHaveLength(4)
+})
+
+test('check all committers signed', async () => {
+  const committers = [
+    { name: 'John', email: 'john@example.com' },
+    { name: 'Jane', email: 'jane@example.com' }
+  ]
+  const list = [ 'john@example.com', 'jane@example.com' ]
+
+  const result = checkSigned(committers, list)
+
+  expect(result.allSigned).toBeTruthy()
+  expect(result.signedCommitters).toHaveLength(2)
+  expect(result.unsignedCommitters).toHaveLength(0)
+})
+
+test('check committers\'s sign if some is not', async () => {
+  const committers = [
+    { name: 'John', email: 'john@example.com' },
+    { name: 'User', email: 'user@example.com' }
+  ]
+  const list = [ 'john@example.com', 'jane@example.com' ]
+
+  const result = checkSigned(committers, list)
+
+  expect(result.allSigned).toBeFalsy()
+  expect(result.signedCommitters).toHaveLength(1)
+  expect(result.unsignedCommitters).toHaveLength(1)
 })
