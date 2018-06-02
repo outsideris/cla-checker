@@ -1,6 +1,6 @@
 const { extractCommitters, fetchList, checkSigned } = require('../lib/cla')
 
-test('extract a email from commits', () => {
+test('extract a email from commits', async () => {
   const commits = [{
     sha: 'be7ef9a',
     commit: {
@@ -31,13 +31,13 @@ test('extract a email from commits', () => {
     parents: [{}]
   }]
 
-  const committers = extractCommitters(commits)
+  const committers = await extractCommitters(commits)
 
   expect(committers).toHaveLength(1)
   expect(committers[0].email).toBe('me@example.com')
 })
 
-test('extract an make unique emails from commits', () => {
+test('extract an make unique emails from commits', async () => {
   const commits = [{
     sha: 'be7ef9a',
     commit: {
@@ -96,7 +96,7 @@ test('extract an make unique emails from commits', () => {
     parents: [{}]
   }]
 
-  const committers = extractCommitters(commits)
+  const committers = await extractCommitters(commits)
 
   expect(committers).toHaveLength(3)
 })
@@ -115,7 +115,7 @@ test('check all committers signed', async () => {
   ]
   const list = [ 'john@example.com', 'jane@example.com' ]
 
-  const result = checkSigned(committers, list)
+  const result = await checkSigned(committers, list)
 
   expect(result.allSigned).toBeTruthy()
   expect(result.signedCommitters).toHaveLength(2)
@@ -129,7 +129,7 @@ test('check committers\'s sign if some is not', async () => {
   ]
   const list = [ 'john@example.com', 'jane@example.com' ]
 
-  const result = checkSigned(committers, list)
+  const result = await checkSigned(committers, list)
 
   expect(result.allSigned).toBeFalsy()
   expect(result.signedCommitters).toHaveLength(1)
