@@ -1,0 +1,28 @@
+{
+  "event": "pull_request",
+  "payload": {
+    "action": "opened",
+    "pull_request": {
+      "number": 4,
+      "user": {
+        "login": "outsideris"
+      },
+      "title": "This is a PR",
+      "head": {
+        "sha": "be7ef9a294f38d2031890de46e55dd1b99be2055"
+      },
+      "base": {
+        "sha": "509b3c3a26c23898893370209a659d8a6b5119af"
+      }
+    },
+    "repository": {
+      "name": "cla-check",
+      "owner": {
+        "login": "outsideris"
+      }
+    },
+    "installation": {
+      "id": 170840
+    }
+  }
+}
