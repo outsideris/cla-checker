@@ -18,11 +18,24 @@ module.exports = async (robot) => {
     const result = await checkSigned(committers, signedList)
 
     if (result.allSigned) {
-      // TODO: leave comment to everybody signed
+      const comment = 'All committers have signed the CLA.'
+      const params = context.issue({ body: comment })
+      await context.github.issues.createComment(params)
     } else if (result.signedCommitters.length > 0) {
-      // TODO: leave comment to who doesn't signed
+      const comment = 'Thank you for your submission, ' +
+        'we really appreciate it. ' +
+        'Like many open source projects, ' +
+        'we ask that you all sign our Contributor License Agreement ' +
+        'before we can accept your contribution.\n' +
+        `${result.signedCommitters.length} out of ` +
+        `${result.signedCommitters.length + result.unsignedCommitters.length} committers ` +
+        'have signed the CLA'
+      const params = context.issue({ body: comment })
+      await context.github.issues.createComment(params)
     } else {
-      // TODO: leave comment to signing required
+      const comment = 'Thank you for your submission, we really appreciate it. Like many open source projects, we ask that you sign our Contributor License Agreement before we can accept your contribution.'
+      const params = context.issue({ body: comment })
+      await context.github.issues.createComment(params)
     }
   }
 }

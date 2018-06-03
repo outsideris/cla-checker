@@ -38,6 +38,9 @@ describe('cla-check', () => {
             ]
           }
         }))
+      },
+      issues: {
+        createComment: jest.fn().mockReturnValue(Promise.resolve({}))
       }
     }
     robot.auth = () => Promise.resolve(github)
@@ -45,5 +48,7 @@ describe('cla-check', () => {
 
   it('check committers and leave a comment', async () => {
     await robot.receive(payload)
+
+    expect(github.issues.createComment).toHaveBeenCalled()
   })
 })
