@@ -32,7 +32,9 @@ module.exports = async (robot) => {
         'before we can accept your contribution.\n' +
         `${result.signedCommitters.length} out of ` +
         `${result.signedCommitters.length + result.unsignedCommitters.length} committers ` +
-        'have signed the CLA'
+        'have signed the CLA\n\n' +
+        result.signedCommitters.map(c => `:white_check_mark: ${c.name}\n`) +
+        result.unsignedCommitters.map(c => `:x: ${c.name}\n`)
     } else {
       comment = 'Thank you for your submission, we really appreciate it. Like many open source projects, we ask that you sign our Contributor License Agreement before we can accept your contribution.'
     }
