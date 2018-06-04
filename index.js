@@ -17,12 +17,12 @@ module.exports = async (robot) => {
     const signedList = await fetchList(config.url)
     const result = await checkSigned(committers, signedList)
 
+    let comment = ''
+
     if (result.allSigned) {
-      const comment = 'All committers have signed the CLA.'
-      const params = context.issue({ body: comment })
-      await context.github.issues.createComment(params)
+      comment = 'All committers have signed the CLA.'
     } else if (result.signedCommitters.length > 0) {
-      const comment = 'Thank you for your submission, ' +
+      comment = 'Thank you for your submission, ' +
         'we really appreciate it. ' +
         'Like many open source projects, ' +
         'we ask that you all sign our Contributor License Agreement ' +
@@ -30,12 +30,26 @@ module.exports = async (robot) => {
         `${result.signedCommitters.length} out of ` +
         `${result.signedCommitters.length + result.unsignedCommitters.length} committers ` +
         'have signed the CLA'
-      const params = context.issue({ body: comment })
-      await context.github.issues.createComment(params)
     } else {
-      const comment = 'Thank you for your submission, we really appreciate it. Like many open source projects, we ask that you sign our Contributor License Agreement before we can accept your contribution.'
-      const params = context.issue({ body: comment })
-      await context.github.issues.createComment(params)
+      comment = 'Thank you for your submission, we really appreciate it. Like many open source projects, we ask that you sign our Contributor License Agreement before we can accept your contribution.'
     }
+
+    // leave comment
+    const params = context.issue({ body: comment })
+    await context.github.issues.createComment(params)
+
+    // update status
+    const status = Object.assign({
+      sha: pr.head.sha,
+      context: 'CLA-checker'
+    }, {
+      state: result.allSigned ? 'success' : 'failure',
+      description: result.allSigned
+        ? 'Contributor License Agreement is signed.'
+        : 'Contributor License Agreement is not signed yet.',
+      target_url: 'https://github.com/outsideris/cla-checker'
+    })
+
+    return context.github.repos.createStatus(context.repo(status))
   }
 }
