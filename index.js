@@ -1,4 +1,5 @@
 const { extractCommitters, fetchList, checkSigned } = require('./lib/cla')
+const { signed, unsigned } = require('./lib/badge')
 
 module.exports = async (robot) => {
   robot.on(['pull_request.opened', 'pull_request.synchronize'], check)
@@ -23,9 +24,11 @@ module.exports = async (robot) => {
     let comment = ''
 
     if (result.allSigned) {
-      comment = 'All committers have signed the CLA.'
+      comment = `<img src="${process.env.HOST}/badge/signed.svg>` +
+        'All committers have signed the CLA.'
     } else if (result.signedCommitters.length > 0) {
-      comment = 'Thank you for your submission, ' +
+      comment = `<img src="${process.env.HOST}/badge/unsigned.svg>` +
+        'Thank you for your submission, ' +
         'we really appreciate it. ' +
         'Like many open source projects, ' +
         'we ask that you all sign our Contributor License Agreement ' +
@@ -36,7 +39,8 @@ module.exports = async (robot) => {
         result.signedCommitters.map(c => `:white_check_mark: ${c.name}\n`) +
         result.unsignedCommitters.map(c => `:x: ${c.name}\n`)
     } else {
-      comment = 'Thank you for your submission, we really appreciate it. Like many open source projects, we ask that you sign our Contributor License Agreement before we can accept your contribution.'
+      comment = `<img src="${process.env.HOST}/badge/unsigned.svg>` +
+        'Thank you for your submission, we really appreciate it. Like many open source projects, we ask that you sign our Contributor License Agreement before we can accept your contribution.'
     }
 
     // leave comment
@@ -57,4 +61,15 @@ module.exports = async (robot) => {
 
     return context.github.repos.createStatus(context.repo(status))
   }
+
+  // routes
+  const app = robot.route('/badge')
+
+  app.get('/signed.svg', (req, res) => {
+    res.end(signed)
+  })
+
+  app.get('/unsigned.svg', (req, res) => {
+    res.end(unsigned)
+  })
 }
