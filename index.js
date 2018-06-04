@@ -6,6 +6,9 @@ module.exports = async (robot) => {
   async function check (context) {
     const config = await context.config('cla-check.yml', {})
 
+    // url is required
+    if (!config.url) { return }
+
     const pr = context.payload.pull_request
 
     const compare = await context.github.repos.compareCommits(context.repo({
