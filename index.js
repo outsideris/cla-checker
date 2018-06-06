@@ -36,8 +36,8 @@ module.exports = async (robot) => {
         `${result.signedCommitters.length} out of ` +
         `${result.signedCommitters.length + result.unsignedCommitters.length} committers ` +
         'have signed the CLA\n\n' +
-        result.signedCommitters.map(c => `:white_check_mark: ${c.name}\n`) +
-        result.unsignedCommitters.map(c => `:x: ${c.name}\n`)
+        result.signedCommitters.map(c => `:white_check_mark: ${c.name}\n`).join('') +
+        result.unsignedCommitters.map(c => `:x: ${c.name}\n`).join('')
     } else {
       comment = `<img src="${process.env.HOST}/badge/unsigned.svg">\n` +
         'Thank you for your submission, we really appreciate it. Like many open source projects, we ask that you sign our Contributor License Agreement before we can accept your contribution.'
