@@ -24,10 +24,10 @@ module.exports = async (robot) => {
     let comment = ''
 
     if (result.allSigned) {
-      comment = `<img src="${process.env.HOST}/badge/signed.svg>` +
+      comment = `<img src="${process.env.HOST}/badge/signed.svg">\n` +
         'All committers have signed the CLA.'
     } else if (result.signedCommitters.length > 0) {
-      comment = `<img src="${process.env.HOST}/badge/unsigned.svg>` +
+      comment = `<img src="${process.env.HOST}/badge/unsigned.svg">\n` +
         'Thank you for your submission, ' +
         'we really appreciate it. ' +
         'Like many open source projects, ' +
@@ -39,7 +39,7 @@ module.exports = async (robot) => {
         result.signedCommitters.map(c => `:white_check_mark: ${c.name}\n`) +
         result.unsignedCommitters.map(c => `:x: ${c.name}\n`)
     } else {
-      comment = `<img src="${process.env.HOST}/badge/unsigned.svg>` +
+      comment = `<img src="${process.env.HOST}/badge/unsigned.svg">\n` +
         'Thank you for your submission, we really appreciate it. Like many open source projects, we ask that you sign our Contributor License Agreement before we can accept your contribution.'
     }
 
