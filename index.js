@@ -5,6 +5,7 @@ module.exports = async (robot) => {
   robot.on(['pull_request.opened', 'pull_request.synchronize'], check)
 
   async function check (context) {
+    console.log(context)
     const config = await context.config('cla-check.yml', {})
 
     // url is required
