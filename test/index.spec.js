@@ -54,4 +54,34 @@ describe('cla-check', () => {
       expect(github.repos.createStatus).toHaveBeenCalled()
     })
   })
+
+  describe('without config file', () => {
+    const configFile = `
+    `
+
+    beforeEach(() => {
+      robot = createRobot()
+      plugin(robot)
+
+      github = {
+        repos: {
+          getContent: jest.fn().mockReturnValue({
+            data: {
+              content: Buffer.from(configFile).toString('base64')
+            }
+          })
+        },
+        issues: {
+          createComment: jest.fn().mockReturnValue(Promise.resolve({}))
+        }
+      }
+      robot.auth = () => Promise.resolve(github)
+    })
+
+    it('leave a comment something worng', async () => {
+      await robot.receive(payload)
+
+      expect(github.issues.createComment).toHaveBeenCalled()
+    })
+  })
 })

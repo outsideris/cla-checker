@@ -1,6 +1,9 @@
 const { extractCommitters, fetchList, checkSigned } = require('./lib/cla')
 const { signed, unsigned } = require('./lib/badge')
 
+const wrongConfig = 'Although [CLA checker](https://github.com/outsideris/cla-checker) is configured,' +
+  'it doesn\'t work. Please check `.github/cla-check.yml`.'
+
 module.exports = async (robot) => {
   robot.on(['pull_request.opened', 'pull_request.synchronize'], check)
 
@@ -8,7 +11,12 @@ module.exports = async (robot) => {
     const config = await context.config('cla-check.yml', {})
 
     // url is required
-    if (!config.url) { return }
+    if (!config.url) {
+      // leave comment
+      const params = context.issue({ body: wrongConfig })
+      await context.github.issues.createComment(params)
+      return
+    }
 
     const pr = context.payload.pull_request
 
