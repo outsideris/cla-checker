@@ -10,8 +10,8 @@ module.exports = async (robot) => {
   async function check (context) {
     const config = await context.config('cla-check.yml', {})
 
-    // url is required
-    if (!config.url) {
+    // required fields
+    if (!config.signedListUrl || !config.claSignFormUrl) {
       // leave comment
       const params = context.issue({ body: wrongConfig })
       await context.github.issues.createComment(params)
@@ -26,16 +26,18 @@ module.exports = async (robot) => {
     }))
 
     const committers = await extractCommitters(compare.data.commits)
-    const signedList = await fetchList(config.url)
+    const signedList = await fetchList(config.signedListUrl)
     const result = await checkSigned(committers, signedList)
 
     let comment = ''
 
     if (result.allSigned) {
-      comment = `<img src="${process.env.HOST}/badge/signed.svg">\n` +
+      comment = `<a href="${config.claSignFormUrl}">` +
+        `<img src="${process.env.HOST}/badge/signed.svg"></a>\n` +
         'All committers have signed the CLA.'
     } else if (result.signedCommitters.length > 0) {
-      comment = `<img src="${process.env.HOST}/badge/unsigned.svg">\n` +
+      comment = `<a href="${config.claSignFormUrl}">` +
+        `<img src="${process.env.HOST}/badge/unsigned.svg"></a>\n` +
         'Thank you for your submission, ' +
         'we really appreciate it. ' +
         'Like many open source projects, ' +
@@ -47,7 +49,8 @@ module.exports = async (robot) => {
         result.signedCommitters.map(c => `:white_check_mark: ${c.name}\n`).join('') +
         result.unsignedCommitters.map(c => `:x: ${c.name}\n`).join('')
     } else {
-      comment = `<img src="${process.env.HOST}/badge/unsigned.svg">\n` +
+      comment = `<a href="${config.claSignFormUrl}">` +
+        `<img src="${process.env.HOST}/badge/unsigned.svg"></a>\n` +
         'Thank you for your submission, we really appreciate it. Like many open source projects, we ask that you sign our Contributor License Agreement before we can accept your contribution.'
     }
 

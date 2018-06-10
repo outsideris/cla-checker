@@ -10,7 +10,7 @@ describe('cla-check', () => {
 
   describe('with config file', () => {
     const configFile = `
-    url: https://gist.githubusercontent.com/outsideris/3219615d9fc251aaf29177d3eb7c1981/raw/84650bac1cec3941952743e2c35d3e276c834eec/cla-test.txt
+    signedListUrl: https://gist.githubusercontent.com/outsideris/3219615d9fc251aaf29177d3eb7c1981/raw/84650bac1cec3941952743e2c35d3e276c834eec/cla-test.txt
     `
 
     beforeEach(() => {
